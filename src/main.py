@@ -16,14 +16,15 @@ def write_dataframe(dataframe, output_path):
     dataframe.coalesce(1) \
         .write \
         .option("header", "false") \
+        .mode("overwrite") \
         .text(output_path)
 
 
 def save_unique_products(dataframe):
     unique_products = dataframe.distinct() \
         .withColumn("product", concat(lit('product '), col('product'))) \
- \
-            write_dataframe(unique_products, UNIQUE_PRODUCTS_PATH)
+
+    write_dataframe(unique_products, UNIQUE_PRODUCTS_PATH)
 
 
 if __name__ == "__main__":
