@@ -5,11 +5,11 @@ plan - the subscription plan name, which can be one of Mobile, Basic, Standard, 
 price - the subscription plan price
 status - the subscription status, which can be one of Subscribed, Upgraded, Downgraded, or Churned
 
-We define a class Subscriber that has the following properties:
+We define a class User that has the following properties:
 
-id - the unique identifier of the subscriber
-subscription - an instance of Subscription that represents the current subscription plan of the subscriber
-history - a list of instances of Subscription that represents the subscription plan changes of the subscriber
+id - the unique identifier of the user
+subscription - an instance of Subscription that represents the current subscription plan of the user
+history - a list of instances of Subscription that represents the subscription plan changes of the user
 
 The example of usage:
 
@@ -18,14 +18,14 @@ basic_plan = Subscription('Basic', 20, 'Subscribed')
 standard_plan = Subscription('Standard', 30, 'Subscribed')
 premium_plan = Subscription('Premium', 40, 'Subscribed')
 
-subscriber1 = Subscriber(1, mobile_plan)
-subscriber1.upgrade_subscription(basic_plan)
+user1 = user(1, mobile_plan)
+user1.upgrade_subscription(basic_plan)
 
-subscriber2 = Subscriber(2, premium_plan)
-subscriber2.downgrade_subscription(standard_plan)
+user2 = user(2, premium_plan)
+user2.downgrade_subscription(standard_plan)
 
-subscriber3 = Subscriber(3, basic_plan)
-subscriber3.churn_subscription()
+user3 = user(3, basic_plan)
+user3.churn_subscription()
 
 """
 
@@ -36,7 +36,7 @@ class Subscription:
         self.status = status
 
 
-class Subscriber:
+class User:
     def __init__(self, id, subscription):
         self.id = id
         self.subscription = subscription
