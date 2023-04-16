@@ -29,11 +29,14 @@ user3.churn_subscription()
 
 """
 
+import datetime
+
 class Subscription:
-    def __init__(self, plan, price, status):
+    def __init__(self, plan, price, status, date=None):
         self.plan = plan
         self.price = price
         self.status = status
+        self.date = date if date is not None else datetime.date.today()
 
 
 class User:
@@ -45,6 +48,7 @@ class User:
     def upgrade_subscription(self, new_subscription):
         if new_subscription.price > self.subscription.price:
             new_subscription.status = 'Upgraded'
+            new_subscription.date = datetime.date.today()
             self.history.append(new_subscription)
             self.subscription = new_subscription
         else:
@@ -53,6 +57,7 @@ class User:
     def downgrade_subscription(self, new_subscription):
         if new_subscription.price < self.subscription.price:
             new_subscription.status = 'Downgraded'
+            new_subscription.date = datetime.date.today()
             self.history.append(new_subscription)
             self.subscription = new_subscription
         else:
@@ -60,5 +65,6 @@ class User:
 
     def churn_subscription(self):
         self.subscription.status = 'Churned'
+        self.subscription.date = datetime.date.today()
         self.history.append(self.subscription)
         self.subscription = None
