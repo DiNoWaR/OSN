@@ -1,6 +1,7 @@
 from util.sparkUtil import *
 from part_one import *
 from part_two import *
+from part_four import *
 from pyspark.sql.functions import *
 from pyspark.sql.window import Window
 
@@ -15,6 +16,8 @@ MIN_MAX_COUNTS_OUTPUT_PATH = "../out/out_2_2.txt"
 BEDROOMS_BATHROOMS_OUTPUT_PATH = "../out/out_2_3.txt"
 CAPACITY_OUTPUT_PATH = "../out/out_2_4.txt"
 
+IRIS_INPUT_PATH = "../input/iris.csv"
+IRIS_PRED_OUTPUT_PATH = "../out/out_3_2.txt"
 
 if __name__ == "__main__":
     spark = get_spark_session()
@@ -46,3 +49,14 @@ if __name__ == "__main__":
         capacity_df: CAPACITY_OUTPUT_PATH
     }.items():
         write_dataframe(df, path, headers=True)
+
+    # Part 4
+    iris_df = read_iris_dataset(spark, IRIS_INPUT_PATH)
+
+    pred_data = spark.createDataFrame(
+        [(5.1, 3.5, 1.4, 0.2),
+         (6.2, 3.4, 5.4, 2.3)],
+        ["sepal_length", "sepal_width", "petal_length", "petal_width"])
+
+    pred_df = make_prediction(iris_df, pred_data)
+    write_dataframe(pred_df, IRIS_PRED_OUTPUT_PATH, headers=True)
