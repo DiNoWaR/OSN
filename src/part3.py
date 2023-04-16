@@ -13,19 +13,31 @@ history - a list of instances of Subscription that represents the subscription p
 
 The example of usage:
 
+# Create some subscription plans
 mobile_plan = Subscription('Mobile', 10, 'Subscribed')
 basic_plan = Subscription('Basic', 20, 'Subscribed')
 standard_plan = Subscription('Standard', 30, 'Subscribed')
 premium_plan = Subscription('Premium', 40, 'Subscribed')
 
+# Create some users
 user1 = user(1, mobile_plan)
-user1.upgrade_subscription(basic_plan)
-
 user2 = user(2, premium_plan)
-user2.downgrade_subscription(standard_plan)
-
 user3 = user(3, basic_plan)
+
+# Upgrade a subscription plan
+new_plan = Subscription('Standard', 30, 'Upgraded')
+user1.upgrade_subscription(new_plan)
+
+# Downgrade a subscription plan
+new_plan = Subscription('Basic', 20, 'Downgraded')
+user2.downgrade_subscription(new_plan)
+
+# Churn a subscription plan
 user3.churn_subscription()
+
+# Print the history of a user
+for subscription in user1.history:
+    print(subscription.plan, subscription.status, subscription.date)
 
 """
 
