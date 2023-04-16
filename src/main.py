@@ -4,16 +4,16 @@ from part_two import *
 from pyspark.sql.functions import *
 from pyspark.sql.window import Window
 
-GROCERIES_INPUT_PATH = "/Users/denisvasilyev/Documents/Projects/OSN/input/groceries.csv"
-UNIQUE_PRODUCTS_OUTPUT_PATH = "/Users/denisvasilyev/Documents/Projects/OSN/out/out_1_2a.txt"
-TOTAL_COUNTS_PRODUCTS_OUTPUT_PATH = "/Users/denisvasilyev/Documents/Projects/OSN/out/out_1_2b.txt"
-TOP_FIVE_PURCHASED_OUTPUT_PATH = "/Users/denisvasilyev/Documents/Projects/OSN/out/out_1_3.txt"
+GROCERIES_INPUT_PATH = "../input/groceries.csv"
+UNIQUE_PRODUCTS_OUTPUT_PATH = "../out/out_1_2a.txt"
+TOTAL_COUNTS_PRODUCTS_OUTPUT_PATH = "../out/out_1_2b.txt"
+TOP_FIVE_PURCHASED_OUTPUT_PATH = "../out/out_1_3.txt"
 
 
-AIRBNB_INPUT_PATH = "/Users/denisvasilyev/Documents/Projects/OSN/input/sf-airbnb-clean.parquet"
-MIN_MAX_COUNTS_OUTPUT_PATH = "/Users/denisvasilyev/Documents/Projects/OSN/out/out_2_2.txt"
-BEDROOMS_BATHROOMS_OUTPUT_PATH = "/Users/denisvasilyev/Documents/Projects/OSN/out/out_2_3.txt"
-CAPACITY_OUTPUT_PATH = "/Users/denisvasilyev/Documents/Projects/OSN/out/out_2_4.txt"
+AIRBNB_INPUT_PATH = "../input/sf-airbnb-clean.parquet"
+MIN_MAX_COUNTS_OUTPUT_PATH = "../out/out_2_2.txt"
+BEDROOMS_BATHROOMS_OUTPUT_PATH = "../out/out_2_3.txt"
+CAPACITY_OUTPUT_PATH = "../out/out_2_4.txt"
 
 
 if __name__ == "__main__":
