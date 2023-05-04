@@ -16,25 +16,10 @@ VALUES (1, 'Mobile'),
        (4, 'Premium');
 
 
-# 2 Create a table to store subscription status:
-CREATE TABLE dim_subscription_status
-(
-    subscription_status_id INTEGER PRIMARY KEY,
-    name                   VARCHAR(255) NOT NULL
-);
-
--- Insert subscription status
-INSERT INTO dim_subscription_status (subscription_status_id, name)
-VALUES (1, 'Subscribed'),
-       (2, 'Upgraded'),
-       (3, 'Downgraded'),
-       (4, 'Churned');
-
-# 3 Create a table to store user data:
+# 2 Create a table to store user data:
 CREATE TABLE users
 (
-    user_id INTEGER PRIMARY KEY,
-    -- Other user attributes like name, email, etc.
+    user_id INTEGER PRIMARY KEY
 );
 
 
@@ -44,14 +29,34 @@ CREATE TABLE fact_user_subscription_history
     id                     SERIAL PRIMARY KEY,
     user_id                INTEGER   NOT NULL,
     subscription_plan_id   INTEGER   NOT NULL,
-    subscription_status_id INTEGER   NOT NULL,
-    event_timestamp        TIMESTAMP NOT NULL,
+    from_date              TIMESTAMP NOT NULL,
+    to_date                TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (user_id),
-    FOREIGN KEY (subscription_plan_id) REFERENCES dim_subscription_plans (subscription_plan_id),
-    FOREIGN KEY (subscription_status_id) REFERENCES dim_subscription_status (subscription_status_id)
+    FOREIGN KEY (subscription_plan_id) REFERENCES dim_subscription_plans (subscription_plan_id)
 );
 
-# With this schema, we separate the dimensions (dim_subscription_plans and dim_subscription_status) from the fact table (fact_user_subscription_history).
-# The fact table holds the historical records of user subscription events, with timestamps for each event.
-# This allows for easier tracking and analysis of changes in user subscriptions over time.
-# To update a user's subscription or set the status to "Churned," you would insert a new record into the fact_user_subscription_history table with the corresponding subscription status ID and a timestamp.
+
+CREATE VIEW subscription_movements AS
+SELECT
+    user_id,
+    subscription_plan_id,
+    from_date AS action_date,
+    CASE
+        WHEN previous_plan_id IS NULL AND subscription_plan_id IS NOT NULL THEN 'Subscribed'
+        WHEN previous_plan_id IS NOT NULL AND subscription_plan_id IS NULL THEN 'Cancelled'
+        WHEN previous_plan_id < subscription_plan_id THEN 'Upgraded'
+        ELSE 'Downgraded'
+        END AS action
+FROM (
+         SELECT
+             user_id,
+             subscription_plan_id,
+             from_date,
+             LAG(subscription_plan_id) OVER (PARTITION BY user_id ORDER BY from_date) AS previous_plan_id,
+             LAG(to_date) OVER (PARTITION BY user_id ORDER BY from_date) AS previous_to_date
+         FROM fact_user_subscription_history
+     ) AS subquery
+WHERE
+        subscription_plan_id != previous_plan_id OR
+(previous_to_date IS NOT NULL AND previous_to_date != from_date - INTERVAL '1 day')
+ORDER BY user_id, action_date;
