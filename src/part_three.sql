@@ -23,7 +23,7 @@ CREATE TABLE users
 );
 
 
-# 4 Create a table to store the user subscription history:
+# 3 Create a table to store the user subscription history:
 CREATE TABLE fact_user_subscription_history
 (
     id                     SERIAL PRIMARY KEY,
